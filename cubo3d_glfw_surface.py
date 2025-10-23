@@ -2,9 +2,7 @@ import glfw
 from OpenGL.GL import *
 from OpenGL.GLU import *
 import numpy as np
-import sys  # Para usar sys.exit() ao fechar a aplicação
-
-# --- Dados do Cubo (Não Mudam) ---
+import sys
 
 verticies = np.array([
     (1, -1, -1),
@@ -25,29 +23,28 @@ edges = (
 )
 
 colors = (
-    (1,0,0),
-    (0,1,0),
-    (0,0,1),
-    (0,1,0),
-    (1,1,1),
-    (0,1,1),
-    (1,0,0),
-    (0,1,0),
-    (0,0,1),
-    (1,0,0),
-    (1,1,1),
-    (0,1,1),
-    )
-
+    (1, 0, 0),
+    (0, 1, 0),
+    (0, 0, 1),
+    (0, 1, 0),
+    (1, 1, 1),
+    (0, 1, 1),
+    (1, 0, 0),
+    (0, 1, 0),
+    (0, 0, 1),
+    (1, 0, 0),
+    (1, 1, 1),
+    (0, 1, 1),
+)
 
 surfaces = (
-    (0,1,2,3),
-    (3,2,7,6),
-    (6,7,5,4),
-    (4,5,1,0),
-    (1,5,7,2),
-    (4,0,3,6)
-    )
+    (0, 1, 2, 3),
+    (3, 2, 7, 6),
+    (6, 7, 5, 4),
+    (4, 5, 1, 0),
+    (1, 5, 7, 2),
+    (4, 0, 3, 6)
+)
 
 
 # --- Função de Desenho ---
@@ -55,11 +52,6 @@ surfaces = (
 def Cube():
     # Desenha as arestas do cubo
     glBegin(GL_QUADS)
-    # A cor de 0,0,1 (azul) é definida na linha anterior no código original,
-    # mas o PyOpenGL tende a reter o último glColor3f.
-    # É melhor definir a cor aqui ou mantê-la fora para ser alterada no loop principal.
-    # Se você quiser que o cubo seja azul (como no seu código):
-    # glColor3f(0, 0, 1)
 
     for surface in surfaces:
         x = 0
@@ -69,11 +61,13 @@ def Cube():
             glVertex3fv(verticies[vertex])
     glEnd()
 
-    # glBegin(GL_LINES)
-    # for edge in edges:
-    #     for vertex in edge:
-    #         glVertex3fv(verticies[vertex])
-    # glEnd()
+
+# Remova estes comentários para inserir as bordas no cubo.
+#     glBegin(GL_LINES)
+#     for edge in edges:
+#         for vertex in edge:
+#             glVertex3fv(verticies[vertex])
+#     glEnd()
 
 
 # --- Função Principal ---
@@ -85,7 +79,11 @@ def main():
 
     WINDOW_WIDTH, WINDOW_HEIGHT = 800, 600
     # Cria uma janela e seu contexto OpenGL
-    window = glfw.create_window(WINDOW_WIDTH, WINDOW_HEIGHT, "GLFW OpenGL Cube", None, None)
+    window = glfw.create_window(WINDOW_WIDTH,
+                                WINDOW_HEIGHT,
+                                "GLFW OpenGL Cube",
+                                None,
+                                None)
 
     if not window:
         glfw.terminate()
@@ -94,24 +92,39 @@ def main():
     # Define o contexto da janela como o contexto de desenho atual
     glfw.make_context_current(window)
 
+    # Este comando permite alterar a cor de fundo da tela.
+    # glClearColor(1.0,
+    #              1.0,
+    #              1.0,
+    #              1.0)
+
+    # Ativa o teste de profundidade...
+    glEnable(GL_DEPTH_TEST)
+
     # Configura a viewport
-    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
+    glViewport(100,
+               50,
+               WINDOW_WIDTH,
+               WINDOW_HEIGHT)
 
     # Configuração da projeção (igual ao gluPerspective do Pygame)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(45, (WINDOW_WIDTH / WINDOW_HEIGHT), 0.1, 50.0)
+    gluPerspective(45,
+                   (WINDOW_WIDTH / WINDOW_HEIGHT),
+                   0.1,
+                   50.0)
     glMatrixMode(GL_MODELVIEW)
-    # Move a câmera para trás (igual ao glTranslatef no seu código)
-    # glTranslatef(0.0, 0.0, -10)
+
     glLoadIdentity()
 
-    # Move a câmera para trás (igual ao glTranslatef no seu código)
-    glTranslatef(0.0, 0.0, -10)
+    # Move a câmera para trás
+    glTranslatef(0.0,
+                 0.0,
+                 -5)
 
-    # 2. Loop Principal
     while not glfw.window_should_close(window):
-        # --- 3. Processamento de Eventos (Entrada) ---
+        # --- Processamento de Eventos (Entrada) ---
         # Sondar (poll) eventos de entrada (teclado, mouse, etc.)
         glfw.poll_events()
 
@@ -119,21 +132,21 @@ def main():
         if glfw.get_key(window, glfw.KEY_ESCAPE) == glfw.PRESS:
             glfw.set_window_should_close(window, True)
 
-        # --- 4. Lógica de Renderização/Atualização ---
+        # --- Lógica de Renderização/Atualização ---
 
-        # Rotação (igual ao glRotatef no seu código)
-        glRotatef(1, 3, 1, 1)
+        # Rotação
+        glRotatef(1,
+                  5,
+                  1,
+                  1)
 
         # Limpa o buffer de cor e profundidade
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-        # Define a cor para o cubo (o verde em (0, 0.7, 0))
-        glColor3f(0, 0.7, 0)
-
         # Desenha o cubo
         Cube()
 
-        # --- 5. Swap Buffers (Troca o buffer de exibição) ---
+        # --- Swap Buffers (Troca o buffer de exibição) ---
         # Equivalente ao pygame.display.flip()
         glfw.swap_buffers(window)
 
