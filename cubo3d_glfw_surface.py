@@ -157,6 +157,8 @@ def main():
     # 6. Encerramento
     glfw.terminate()
 
-
+# TODO(modifique o exemplo para capturar o envento do teclado (setas direcionais)
+#  e altere o sentido de rotação do cubo, ou faça com que ele se movimente de acordo
+# com a tecla pressionada.
 if __name__ == "__main__":
     main()
